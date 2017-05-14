@@ -80,8 +80,6 @@ func saveDataEntryToMongo(c *mgo.Collection, dataEntry DataEntry) {
 	result := Contract{}
 	err := c.Find(bson.M{"contratocod": dataEntry.ContratoCOD}).One(&result)
 	if err != nil {
-		//log.Fatal(err)
-		//fmt.Println(err)
 		//user not found, so let's add a new entry
 		var arrDataEntry []DataEntry
 		arrDataEntry = append(arrDataEntry, dataEntry)
@@ -91,7 +89,6 @@ func saveDataEntryToMongo(c *mgo.Collection, dataEntry DataEntry) {
 			log.Fatal(err)
 		}
 	} else {
-		//fmt.Println(result)
 		result.Data = append(result.Data, dataEntry)
 		err = c.Update(bson.M{"contratocod": dataEntry.ContratoCOD}, result)
 		if err != nil {
@@ -119,8 +116,9 @@ func main() {
 	for fscanner.Scan() {
 		line := fscanner.Text()
 		newDataEntry := lineToStruct(line)
-		fmt.Println("line " + strconv.Itoa(i) + ": " + newDataEntry.ContratoCOD)
-		//fmt.Println(newDataEntry)
+		fmt.Println("line " + "\x1b[35;1m" + strconv.Itoa(i) + "\x1b[0m" + ": " + "\x1b[36;1m" + newDataEntry.ContratoCOD + "\x1b[0m")
+		fmt.Println(newDataEntry)
+		fmt.Println("consum: " + "\x1b[32;1m" + newDataEntry.Consumo + "\x1b[0m")
 		saveDataEntryToMongo(c, newDataEntry)
 		i++
 	}
